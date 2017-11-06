@@ -28,7 +28,7 @@ class TransferData:
 
 def main():
 
-    access_token = 'YsKVw9rI3lYAAAAAAACDUQSmbSj32aaxmkFgSTGSszfYZhqlNWtIoYpqOCbdE2bm'
+    access_token = 'access token here'
     print(file_name)
     writeFile("\n CRON event "+ file_name, "/home/pi/timelapse/cronlog.txt")
     transferData = TransferData(access_token)
