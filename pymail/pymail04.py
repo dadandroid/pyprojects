@@ -14,7 +14,7 @@ elif os.name == 'nt': root = os.path.abspath(os.sep)
 mykeys = imp.load_source('module.name', root+'pykeys.py')
 
 fromaddr = mykeys.ojeto_email_user
-toaddr = mykeys.hermesite
+toaddr = mykeys.hermes
  
 msg = MIMEMultipart()
  
@@ -42,4 +42,5 @@ server.login(fromaddr, mykeys.ojeto_email_pass)
 text = msg.as_string()
 server.sendmail(fromaddr, toaddr, text)
 server.quit()
+
 print('email sent to {0}'.format(toaddr))
