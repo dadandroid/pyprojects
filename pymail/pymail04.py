@@ -14,15 +14,15 @@ elif os.name == 'nt': root = os.path.abspath(os.sep)
 mykeys = imp.load_source('module.name', root+'pykeys.py')
 
 fromaddr = mykeys.ojeto_email_user
-toaddr = mykeys.david_email_user
+toaddr = mykeys.hermes_email_user
  
 msg = MIMEMultipart()
  
 msg['From'] = fromaddr
 msg['To'] = toaddr
-msg['Subject'] = "test mail for david"
+msg['Subject'] = "mail de prueba para -Hermesite-"
  
-body = "this is a test"
+body = "Hola Hermesite soy el OjetoBot me podrias confirmar si te llego una imagen?"
  
 msg.attach(MIMEText(body, 'plain'))
  
