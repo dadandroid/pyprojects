@@ -14,7 +14,7 @@ elif os.name == 'nt': root = os.path.abspath(os.sep)
 mykeys = imp.load_source('module.name', root+'pykeys.py')
 
 fromaddr = mykeys.ojeto_email_user
-toaddr = mykeys.hermes
+toaddr = mykeys.david
  
 msg = MIMEMultipart()
  
