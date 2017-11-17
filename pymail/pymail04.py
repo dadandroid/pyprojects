@@ -14,7 +14,7 @@ elif os.name == 'nt': root = os.path.abspath(os.sep)
 mykeys = imp.load_source('module.name', root+'pykeys.py')
 
 fromaddr = mykeys.ojeto_email_user
-toaddr = mykeys.david
+toaddr = mykeys.belen
  
 msg = MIMEMultipart()
  
@@ -22,7 +22,7 @@ msg['From'] = fromaddr
 msg['To'] = toaddr
 msg['Subject'] ='foto para {0}'.format(toaddr)
  
-body = "Hola Hermesite soy el OjetoBot me podrias confirmar si te llego una imagen?"
+body = "Hola Belen soy el OjetoBot me podrias confirmar si te llego una imagen?"
  
 msg.attach(MIMEText(body, 'plain'))
  
