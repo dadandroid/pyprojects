@@ -20,7 +20,7 @@ msg = MIMEMultipart()
  
 msg['From'] = fromaddr
 msg['To'] = toaddr
-msg['Subject'] = "mail de prueba para -Hermesite-"
+msg['Subject'] ='foto para {0}'.format(toaddr)
  
 body = "Hola Hermesite soy el OjetoBot me podrias confirmar si te llego una imagen?"
  
