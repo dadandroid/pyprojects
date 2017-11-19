@@ -18,7 +18,8 @@ fromaddr = mykeys.ojeto_email_user
 toaddr = mykeys.belen
  
 msg = MIMEMultipart()
- 
+
+
 msg['From'] = fromaddr
 msg['To'] = toaddr
 msg['Subject'] ='foto para {0}'.format(toaddr)
