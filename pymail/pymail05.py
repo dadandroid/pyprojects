@@ -15,9 +15,9 @@ elif os.name == 'nt': root = os.path.abspath(os.sep)
 mykeys = imp.load_source('module.name', root+'pykeys.py')
 
 fromaddr = mykeys.ojeto_email_user
-toaddr = mykeys.belen
+toaddr = mykeys.david
  
-msg = email.MIMEMultipart()
+msg = email.MIMEMultipart.MIMEMultipart()
 
 
 msg['From'] = fromaddr
@@ -26,14 +26,14 @@ msg['Subject'] ='foto para {0}'.format(toaddr)
  
 body = "Hola Belen soy el OjetoBot me podrias confirmar si te llego una imagen?"
  
-msg.attach(email.MIMEText(body, 'plain'))
+msg.attach(email.MIMEText.MIMEText(body, 'plain'))
  
 filename = "20171116-223337.jpg"
 attachment = open("/home/pi/pypics/20171116-223337.jpg", "rb")
  
-part = email.MIMEBase('application', 'octet-stream')
+part = email.MIMEBase.MIMEBase('application', 'octet-stream')
 part.set_payload((attachment).read())
-encoders.encode_base64(part)
+email.encoders.encode_base64(part)
 part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
  
 msg.attach(part)
