@@ -17,7 +17,7 @@ mykeys = imp.load_source('module.name', root+'pykeys.py')
 fromaddr = mykeys.ojeto_email_user
 toaddr = mykeys.belen
  
-msg = MIMEMultipart()
+msg = email.MIMEMultipart()
 
 
 msg['From'] = fromaddr
