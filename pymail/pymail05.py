@@ -26,12 +26,12 @@ msg['Subject'] ='foto para {0}'.format(toaddr)
  
 body = "Hola Belen soy el OjetoBot me podrias confirmar si te llego una imagen?"
  
-msg.attach(MIMEText(body, 'plain'))
+msg.attach(email.MIMEText(body, 'plain'))
  
 filename = "20171116-223337.jpg"
 attachment = open("/home/pi/pypics/20171116-223337.jpg", "rb")
  
-part = MIMEBase('application', 'octet-stream')
+part = email.MIMEBase('application', 'octet-stream')
 part.set_payload((attachment).read())
 encoders.encode_base64(part)
 part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
