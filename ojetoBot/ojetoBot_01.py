@@ -37,8 +37,6 @@ def checkmail():
           for response_part in data:
              if isinstance(response_part, tuple):
                  original = email.message_from_string(response_part[1])
-                 print(original['From'])
-                 print (original['Subject'])
                  from_= original['From']
                  from_email = from_.split('<')[-1].split('>')[0]
                  typ, data = mail.store(num,'+FLAGS','\\Seen')
