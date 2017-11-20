@@ -26,8 +26,6 @@ picpath = None
 ispictaken = False
 isrequest = False
 
-req_emails = []
-
 def checkmail():
     global isrequest
     mail = imaplib.IMAP4_SSL('imap.gmail.com')
@@ -46,8 +44,7 @@ def checkmail():
              if isinstance(response_part, tuple):
                  if os.name == 'posix': original = email.message_from_string(response_part[1])
                  else: original = email.message_from_bytes(response_part[1]) 
-                 #from_= original['From']
-                 req_emails.append(from_.split('<')[-1].split('>')[0])
+                 from_email = original['From'].split('<')[-1].split('>')[0]
                  typ, data = mail.store(num,'+FLAGS','\\Seen')
                  if original['Subject'] == "damefoto":
                     if from_email in mykeys.clients.values():
@@ -118,12 +115,12 @@ def sendMsg(message):
 
 checkmail()
 if isrequest:
-    try:
-        take_pic()
-        if ispictaken:
-            for i in range(len(client_emails)):
-                sendpic(client_emails[i], client_names[i])
-        else: pass
-    except: 
+    #try:
+    take_pic()
+    if ispictaken:
+        for i in range(len(client_emails)):
+            sendpic(client_emails[i], client_names[i])
+    else: pass
+    #except: 
         print("sorry no pic available")
         #sendmsg("sorry no pic available")
