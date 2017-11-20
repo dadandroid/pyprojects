@@ -26,3 +26,5 @@ if retcode == 'OK':
              typ, data = mail.store(num,'+FLAGS','\\Seen')
 
 print (n)
+
+

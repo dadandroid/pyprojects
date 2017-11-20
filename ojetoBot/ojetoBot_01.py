@@ -1,26 +1,26 @@
-
+import imaplib
 import smtplib
 import email
 import imp
 import os
-
+import picamera
+import time
 
 ### send emails with attachments using local keys ###
 if os.name == 'posix': root = "/home/pi/"    
 elif os.name == 'nt': root = os.path.abspath(os.sep)
 mykeys = imp.load_source('module.name', root+'pykeys.py')
 
+server_mail_user = mykeys.ojeto_email_user
+client_email_user = mykeys.clients['david']
+current_time = time.strftime("%Y%m%d-%H%M%S")
 
-def getmait():
-    fromaddr = mykeys.ojeto_email_user
-    toaddr = mykeys.david
+def sendpic():
  
     msg = email.MIMEMultipart.MIMEMultipart()
-
-
-    msg['From'] = fromaddr
-    msg['To'] = toaddr
-    msg['Subject'] ='foto para {0}'.format(toaddr)
+    msg['From'] = server_mail_user
+    msg['To'] = client_email_user
+    msg['Subject'] ='foto para {0}'.format(client_email_user[:5])
  
     body = "Hola Belen soy el OjetoBot me podrias confirmar si te llego una imagen?"
  
@@ -38,9 +38,72 @@ def getmait():
  
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
-    server.login(fromaddr, mykeys.ojeto_email_pass)
+    server.login(server_mail_user, mykeys.ojeto_email_pass)
     text = msg.as_string()
-    server.sendmail(fromaddr, toaddr, text)
+    server.sendmail(server_mail_user, client_email_user, text)
     server.quit()
 
-    print('email sent to {0}'.format(toaddr))
+    print('email sent to {0}'.format(client_email_user))
+
+
+def checkmail():
+    mail = imaplib.IMAP4_SSL('imap.gmail.com')
+    (retcode, capabilities) = mail.login(server_mail_user,server_mail_pass)
+    mail.list()
+    mail.select('inbox')
+    (retcode, messages) = mail.search(None, '(UNSEEN)')
+    n = 0
+    if retcode == 'OK':
+       for num in messages[0].split() :
+          print('you got new mail!... ')
+          n=n+1
+          typ, data = mail.fetch(num,'(RFC822)')
+          for response_part in data:
+             if isinstance(response_part, tuple):
+                 original = email.message_from_string(response_part[1])
+                 print(original['From'])
+                 print (original['Subject'])
+                 from_= original['From']
+                 from_email = from_.split('<')[-1].split('>')[0]
+                 typ, data = mail.store(num,'+FLAGS','\\Seen')
+
+
+                 if original['Subject'] == "damefoto":                     
+                    if from_email == client_email_user: 
+                        print('its david')
+                        take_pic()
+
+                        if isPicTaken: 
+                            print(picpath+picname)
+                            sendpic()
+                            print('all done')
+                        #else: sendMsg("sorry no pic available")
+                            
+
+    if n == 0: print('sorry, no new mail')  
+
+
+def take_pic():
+    picname = current_time + '.jpg'
+    picpath = '/home/pi/pypics/'
+    cam = picamera.PiCamera()
+    cam.start_preview()
+    time.sleep(2)
+    cam.resolution = (2592, 1944)
+    cam.vflip = True
+    cam.hflip = True
+    cam.capture(picpath+picname)
+    cam.stop_preview()
+    isPicTaken = True
+    print('pic taken!')
+
+
+def sendMsg(message):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(server_mail_user, server_mail_pass)
+    msg = message
+    server.sendmail(server_mail_user, server_mail_pass, msg)
+    server.quit()
+
+checkmail()
