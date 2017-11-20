@@ -13,7 +13,7 @@ mykeys = imp.load_source('module.name', root+'pykeys.py')
 
 server_mail_user = mykeys.ojeto_email_user
 client_email_user = mykeys.clients['david']
-current_time = time.strftime("%Y%m%d-%H%M%S")
+current_time = time.strftime("%Y%m%d%H%M%S")
 
 def sendpic():
  
@@ -48,7 +48,7 @@ def sendpic():
 
 def checkmail():
     mail = imaplib.IMAP4_SSL('imap.gmail.com')
-    (retcode, capabilities) = mail.login(server_mail_user,server_mail_pass)
+    (retcode, capabilities) = mail.login(server_mail_user, mykeys.ojeto_email_pass)
     mail.list()
     mail.select('inbox')
     (retcode, messages) = mail.search(None, '(UNSEEN)')
@@ -101,9 +101,9 @@ def take_pic():
 def sendMsg(message):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
-    server.login(server_mail_user, server_mail_pass)
+    server.login(server_mail_user, mykeys.ojeto_email_pass)
     msg = message
-    server.sendmail(server_mail_user, server_mail_pass, msg)
+    server.sendmail(server_mail_user, mykeys.ojeto_email_pass, msg)
     server.quit()
 
 checkmail()
