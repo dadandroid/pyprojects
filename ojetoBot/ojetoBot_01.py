@@ -8,7 +8,7 @@ import picamera
 import time
 
 ### send emails with attachments using local keys ###
-if os.name == 'posix': root = "/home/pi/"    
+if os.name == 'posix': root = "/home/pi/"
 elif os.name == 'nt': root = os.path.abspath(os.sep)
 mykeys = imp.load_source('module.name', root+'pykeys.py')
 
@@ -16,7 +16,7 @@ server_mail_user = mykeys.ojeto_email_user
 client_email_user = mykeys.clients['david']
 
 #current_time = None
-isPicTaken = False
+ispictaken = False
 #client_email = None
 #client_name = None
 #picname = None
@@ -41,24 +41,24 @@ def checkmail():
                  from_= original['From']
                  from_email = from_.split('<')[-1].split('>')[0]
                  typ, data = mail.store(num,'+FLAGS','\\Seen')
-                 
-                 if original['Subject'] == "damefoto":   
+
+                 if original['Subject'] == "damefoto":
                     print ("subject check")
                     print(from_email)
                     if from_email in mykeys.clients.values():
                         print ("from check")
                         client_name = list(mykeys.clients.keys())[list(mykeys.clients.values()).index(from_email)]
                         client_email = from_email
-                        print('new request from %s')%(client_name)                  
-                        if take_pic(): 
-                            picfile = picpath,picname
-			                print(picfile)
+                        print('new request from %s')%(client_name)
+                        take_pic()
+                        if ispictaken == True:
+                            print(picfile)
                             sendpic()
                             print('all done')
                         #else: sendMsg("sorry no pic available")
-     
 
-    if n == 0: print('sorry, no new mail')  
+
+    if n == 0: print('sorry, no new mail')
 
 
 def sendpic():
@@ -67,21 +67,21 @@ def sendpic():
     msg['From'] = server_mail_user
     msg['To'] = client_email
     msg['Subject'] ='foto para {0}'.format(client_name)
- 
+
     body = "Hola %s. Aqui tienes la foto que me pediste"%(client_name)
- 
+
     msg.attach(email.MIMEText.MIMEText(body, 'plain'))
- 
+
     filename = picname
     attachment = open(picpath+picname, "rb")
- 
+
     part = email.MIMEBase.MIMEBase('application', 'octet-stream')
     part.set_payload((attachment).read())
     email.encoders.encode_base64(part)
     part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
- 
+
     msg.attach(part)
- 
+
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server.login(server_mail_user, mykeys.ojeto_email_pass)
@@ -105,8 +105,8 @@ def take_pic():
     cam.hflip = True
     cam.capture(picpath+picname)
     cam.stop_preview()
-    print('pic taken!')
-    return True
+    ispictaken = True
+    print('pic taken')
 
 
 def sendMsg(message):
