@@ -15,12 +15,12 @@ mykeys = imp.load_source('module.name', root+'pykeys.py')
 server_mail_user = mykeys.ojeto_email_user
 client_email_user = mykeys.clients['david']
 
-current_time = None
+#current_time = None
 isPicTaken = False
-client_email = None
-client_name = None
-picname = None
-picpath = None
+#client_email = None
+#client_name = None
+#picname = None
+#picpath = None
 
 
 def checkmail():
@@ -52,7 +52,7 @@ def checkmail():
                         print('new request from %s')%(client_name)                  
                         if take_pic(): 
                             picfile = picpath,picname
-			    print(picfile)
+			                print(picfile)
                             sendpic()
                             print('all done')
                         #else: sendMsg("sorry no pic available")
