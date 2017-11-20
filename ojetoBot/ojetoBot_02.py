@@ -4,7 +4,7 @@ import smtplib
 import email
 import imp
 import os
-#import picamera
+import picamera
 import time
 
 ### send emails with attachments using local keys ###
@@ -15,13 +15,14 @@ mykeys = imp.load_source('module.name', root+'pykeys.py')
 server_mail_user = mykeys.ojeto_email_user
 client_email_user = mykeys.clients['david']
 
-#current_time = None
+current_time = None
 ispictaken = False
-#client_email = None
-#client_name = None
-#picname = None
-#picpath = None
+client_email = None
+client_name = None
+picname = None
+picpath = None
 authentication = False
+
 
 def checkmail():
     mail = imaplib.IMAP4_SSL('imap.gmail.com')
@@ -37,9 +38,7 @@ def checkmail():
           typ, data = mail.fetch(num,'(RFC822)')
           for response_part in data:
              if isinstance(response_part, tuple):
-                 original = email.message_from_bytes(response_part[1])
-                 #original = email.message_from_string(response_part[1]) #works in nt
-
+                 original = email.message_from_string(response_part[1])
                  from_= original['From']
                  from_email = from_.split('<')[-1].split('>')[0]
                  typ, data = mail.store(num,'+FLAGS','\\Seen')
@@ -50,18 +49,9 @@ def checkmail():
                     if from_email in mykeys.clients.values():
                         print ("from check")
                         client_name = list(mykeys.clients.keys())[list(mykeys.clients.values()).index(from_email)]
-                        print (client_name)
                         client_email = from_email
-                        print('new request from {0}'.format(client_name))
-                        global authentication 
-                        authentication = True
-                        #take_pic()
-                        #if ispictaken == True:
-                        #    print(picfile)
-                        #    sendpic()
-                        #    print('all done')
-                        #else: sendMsg("sorry no pic available")
-
+                        print('new request from %s @ %s')%(client_name, client_email)
+                        authentication = True                        
 
     if n == 0: print('sorry, no new mail')
 
@@ -125,4 +115,3 @@ def sendMsg(message):
 
 
 checkmail()
-print(authentication)
