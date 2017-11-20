@@ -43,8 +43,10 @@ def checkmail():
                  from_email = from_.split('<')[-1].split('>')[0]
                  typ, data = mail.store(num,'+FLAGS','\\Seen')
                  
-                 if original['Subject'] == "damefoto":                     
+                 if original['Subject'] == "damefoto":   
+                    print ("subject check")
                     if from_email in mykeys.clients.values():
+                        print ("from check")
                         client_name = list(mydict.keys())[list(mydict.values()).index(from_email)]
                         client_email = from_email
                         print('new request from %d')%(client_name)                  
