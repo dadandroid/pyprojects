@@ -91,6 +91,7 @@ def sendpic():
 
 
 def take_pic():
+    current_time = time.strftime("%Y%m%d%H%M%S")+ '.jpg'
     picname = current_time + '.jpg'
     picpath = '/home/pi/pypics/'
     picfile = picpath + picname
