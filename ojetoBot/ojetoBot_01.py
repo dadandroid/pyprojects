@@ -43,10 +43,10 @@ def checkmail():
                  
                  if original['Subject'] == "damefoto":   
                     print ("subject check")
-		    print(from_email)
+                    print(from_email)
                     if from_email in mykeys.clients.values():
                         print ("from check")
-                        client_name = list(mykeys.client.keys())[list(mykeys.client.values()).index(from_email)]
+                        client_name = list(mykeys.clients.keys())[list(mykeys.clients.values()).index(from_email)]
                         client_email = from_email
                         print('new request from %d')%(client_name)                  
                         if take_pic(): 
