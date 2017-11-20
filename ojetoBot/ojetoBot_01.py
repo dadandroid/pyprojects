@@ -22,6 +22,7 @@ client_name = None
 picname = None
 picpath = None
 
+
 def checkmail():
     mail = imaplib.IMAP4_SSL('imap.gmail.com')
     (retcode, capabilities) = mail.login(server_mail_user, mykeys.ojeto_email_pass)
@@ -50,8 +51,9 @@ def checkmail():
                         client_email = from_email
                         print('new request from %s')%(client_name)                  
                         if take_pic(): 
-                            print(picfile)
-                            sendpic(client_email, picfile)
+                            picfile = picpath,picname
+			    print(picfile)
+                            sendpic()
                             print('all done')
                         #else: sendMsg("sorry no pic available")
      
@@ -66,7 +68,7 @@ def sendpic():
     msg['To'] = client_email
     msg['Subject'] ='foto para {0}'.format(client_name)
  
-    body = "Hola %d. Aqui tienes la foto que me pediste"%(client_name)
+    body = "Hola %s. Aqui tienes la foto que me pediste"%(client_name)
  
     msg.attach(email.MIMEText.MIMEText(body, 'plain'))
  
