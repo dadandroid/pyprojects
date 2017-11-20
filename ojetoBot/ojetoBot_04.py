@@ -4,7 +4,7 @@ import smtplib
 import email
 import imp
 import os
-#import picamera
+import picamera
 import time
 
 ### send emails with attachments using local keys ###
@@ -34,28 +34,28 @@ def checkmail():
     mail.select('inbox')
     (retcode, messages) = mail.search(None, '(UNSEEN)')
     n = 0
-    if retcode == 'OK':      
+    if retcode == 'OK':
 
        for num in messages[0].split() :
           n=n+1
-          typ, data = mail.fetch(num,'(RFC822)')          
+          typ, data = mail.fetch(num,'(RFC822)')
           ##do this for each message received
           for response_part in data:
              if isinstance(response_part, tuple):
                  if os.name == 'posix': original = email.message_from_string(response_part[1])
-                 else: original = email.message_from_bytes(response_part[1]) 
+                 else: original = email.message_from_bytes(response_part[1])
                  from_email = original['From'].split('<')[-1].split('>')[0]
                  typ, data = mail.store(num,'+FLAGS','\\Seen')
                  if original['Subject'] == "damefoto":
                     if from_email in mykeys.clients.values():
                         isrequest = True
                         client_names.append(list(mykeys.clients.keys())[list(mykeys.clients.values()).index(from_email)])
-                        client_emails.append(from_email)              
-    if n == 0: print('sorry, no new mail')
+                        client_emails.append(from_email)
+    if n == 0: pass
 
 
 def sendpic(client_email, client_name):
-   
+
     msg = email.MIMEMultipart.MIMEMultipart()
     msg['From'] = server_email
     msg['To'] = client_email
@@ -82,9 +82,6 @@ def sendpic(client_email, client_name):
     server.sendmail(server_email, client_email, text)
     server.quit()
 
-    print('email sent to {0}'.format(client_name))
-
-
 def take_pic():
     global picname
     global picpath
@@ -98,29 +95,25 @@ def take_pic():
     cam.hflip = True
     cam.capture(picpath+picname)
     cam.stop_preview()
-    global ispictaken 
+    global ispictaken
     ispictaken = True
 
 
 
-def sendMsg(message):
+def sendMsg(email, message):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server.login(server_email, mykeys.ojeto_email_pass)
     msg = message
-    server.sendmail(server_email, mykeys.ojeto_email_pass, msg)
+    server.sendmail(server_email, email, msg)
     server.quit()
-
-
 
 checkmail()
 if isrequest:
-    #try:
     take_pic()
     if ispictaken:
         for i in range(len(client_emails)):
-            sendpic(client_emails[i], client_names[i])
-    else: pass
-    #except: 
-        print("sorry no pic available")
-        #sendmsg("sorry no pic available")
+            try: sendpic(client_emails[i], client_names[i])
+            except:
+                msg = 'No he podido enviarte la foto. por favor intentalo nuevamente'
+                sendmsg(client_emails[i], msg)
