@@ -8,6 +8,7 @@ import picamera
 import time
 
 ### send emails with attachments using local keys ###
+### working ver.
 
 #get local keys
 if os.name == 'posix': root = "/home/pi/"

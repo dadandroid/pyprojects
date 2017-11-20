@@ -1,12 +1,12 @@
 import imaplib
 import email
 
-IMAP_server = #IMAP SERVER
-user = #username
-pass = #password
+IMAP_server = 'imap.gmail.com'
+user = 'ojeto54@gmail.com'
+passw  = 'CosmoCarretero0604'
 
 mail = imaplib.IMAP4_SSL('imap.gmail.com')
-(retcode, capabilities) = mail.login(user,pass)
+(retcode, capabilities) = mail.login(user,passw)
 mail.list()
 mail.select('inbox')
 
@@ -23,6 +23,7 @@ if retcode == 'OK':
              original = email.message_from_bytes(response_part[1])
              print(original['From'])
              print (original['Subject'])
+             print (original['Body'])
              typ, data = mail.store(num,'+FLAGS','\\Seen')
 
 print (n)

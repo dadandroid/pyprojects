@@ -17,3 +17,15 @@ if from_email in mykeys.clients.values():
     print('yeah')
     client_name = list(mykeys.clients.keys())[list(mykeys.clients.values()).index(from_email)]
     print(type(client_name))
+
+
+
+empty = []
+def test ():
+    g = 5
+    empty.append(g)
+
+print(empty)
+test()
+print(empty)
+    

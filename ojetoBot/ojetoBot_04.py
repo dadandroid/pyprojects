@@ -4,7 +4,7 @@ import smtplib
 import email
 import imp
 import os
-import picamera
+#import picamera
 import time
 
 ### send emails with attachments using local keys ###
@@ -18,59 +18,46 @@ mykeys = imp.load_source('module.name', root+'pykeys.py')
 
 
 server_email = mykeys.ojeto_email_user
-client_email = None
-client_name = None
+client_emails = []
+client_names = []
 current_time = time.strftime("%Y%m%d%H%M%S")
 picname = None
 picpath = None
 ispictaken = False
-authentication = False
+isrequest = False
+
+req_emails = []
 
 def checkmail():
+    global isrequest
     mail = imaplib.IMAP4_SSL('imap.gmail.com')
     (retcode, capabilities) = mail.login(server_email, mykeys.ojeto_email_pass)
     mail.list()
     mail.select('inbox')
     (retcode, messages) = mail.search(None, '(UNSEEN)')
     n = 0
-    if retcode == 'OK':
+    if retcode == 'OK':      
+
        for num in messages[0].split() :
-          print('you got new mail!... ')
           n=n+1
-          typ, data = mail.fetch(num,'(RFC822)')
+          typ, data = mail.fetch(num,'(RFC822)')          
+          ##do this for each message received
           for response_part in data:
              if isinstance(response_part, tuple):
                  if os.name == 'posix': original = email.message_from_string(response_part[1])
                  else: original = email.message_from_bytes(response_part[1]) 
-
-                 from_= original['From']
-                 from_email = from_.split('<')[-1].split('>')[0]
+                 #from_= original['From']
+                 req_emails.append(from_.split('<')[-1].split('>')[0])
                  typ, data = mail.store(num,'+FLAGS','\\Seen')
-
                  if original['Subject'] == "damefoto":
-                    print ("subject check")
-                    print(from_email)
                     if from_email in mykeys.clients.values():
-                        global client_name
-                        global client_email
-                        print ("from check")
-                        client_name = list(mykeys.clients.keys())[list(mykeys.clients.values()).index(from_email)]
-                        client_email = from_email
-                        print('new request from {0}'.format(client_name))
-                        global authentication 
-                        authentication = True
-                        take_pic()
-                        if ispictaken:
-                            #print(picfile)
-                            sendpic()
-                            print('all done')
-                        else: sendmsg("sorry no pic available")
-
-
+                        isrequest = True
+                        client_names.append(list(mykeys.clients.keys())[list(mykeys.clients.values()).index(from_email)])
+                        client_emails.append(from_email)              
     if n == 0: print('sorry, no new mail')
 
 
-def sendpic():
+def sendpic(client_email, client_name):
    
     msg = email.MIMEMultipart.MIMEMultipart()
     msg['From'] = server_email
@@ -116,7 +103,7 @@ def take_pic():
     cam.stop_preview()
     global ispictaken 
     ispictaken = True
-    print('pic taken')
+
 
 
 def sendMsg(message):
@@ -130,4 +117,13 @@ def sendMsg(message):
 
 
 checkmail()
-print(authentication)
+if isrequest:
+    try:
+        take_pic()
+        if ispictaken:
+            for i in range(len(client_emails)):
+                sendpic(client_emails[i], client_names[i])
+        else: pass
+    except: 
+        print("sorry no pic available")
+        #sendmsg("sorry no pic available")
