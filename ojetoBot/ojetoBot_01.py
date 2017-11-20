@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import imaplib
 import smtplib
 import email
@@ -15,6 +17,8 @@ server_mail_user = mykeys.ojeto_email_user
 client_email_user = mykeys.clients['david']
 current_time = time.strftime("%Y%m%d%H%M%S")
 
+isPicTaken = False
+
 def sendpic():
  
     msg = email.MIMEMultipart.MIMEMultipart()
@@ -22,7 +26,7 @@ def sendpic():
     msg['To'] = client_email_user
     msg['Subject'] ='foto para {0}'.format(client_email_user[:5])
  
-    body = "Hola Belen soy el OjetoBot me podrias confirmar si te llego una imagen?"
+    body = "Hola %d soy el OjetoBot me podrias confirmar si te llego una imagen?"%()
  
     msg.attach(email.MIMEText.MIMEText(body, 'plain'))
  
