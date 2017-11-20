@@ -48,7 +48,7 @@ def checkmail():
                         print ("from check")
                         client_name = list(mykeys.clients.keys())[list(mykeys.clients.values()).index(from_email)]
                         client_email = from_email
-                        print('new request from %d')%(client_name)                  
+                        print('new request from %s')%(client_name)                  
                         if take_pic(): 
                             print(picfile)
                             sendpic(client_email, picfile)
