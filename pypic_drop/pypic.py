@@ -9,8 +9,6 @@ import imp
 ### saves pic in dropbox using local keys ###
 
 #get local keys
-if os.name == 'posix': root = "/home/pi/"
-elif os.name == 'nt': root = os.path.abspath(os.sep)
 mykeys = imp.load_source('module.name', root+'pykeys.py')
 
 def writeFile(something, text_file):
