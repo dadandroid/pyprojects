@@ -9,7 +9,7 @@ import imp
 ### saves pic in dropbox using local keys ###
 
 #get local keys
-mykeys = imp.load_source('module.name', root+'pykeys.py')
+mykeys = imp.load_source('module.name', root+'/home/pi/pykeys.py')
 
 def writeFile(something, text_file):
 
